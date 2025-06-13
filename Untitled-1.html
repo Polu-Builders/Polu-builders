@@ -8,35 +8,54 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <style>
-    /* Reset & Basic */
+/* Reset & Basic */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body, html {
+@font-face {
+  font-family: 'Kelpo';
+  src: url('Kelpo-DEMO.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Athletics';
+  src: url('Athletics-Medium.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body,
+html {
   height: 100%;
+  font-family: 'Kelpo', sans-serif;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
   position: relative;
+  font-size: 16px; /* Set a base font size */
 }
 
 /* Logo */
 .logo {
   position: absolute;
-  top: 20px;
-  left: 30px;
+  top: 1.5em; /* Relative to body font size */
+  left: 2em; /* Relative to body font size */
   z-index: 3;
 }
+
 .logo img {
-  height: 50px;
+  height: 3em; /* Relative to logo's font size (implicitly the body's) */
+  max-width: 20vw; /* Still use vw for smaller screens */
+  height: auto;
 }
 
 /* Background Slider */
 .background-slider {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
   position: absolute;
   top: 0;
@@ -46,20 +65,26 @@ body, html {
 
 .slide-track {
   display: flex;
-  width: calc(300%);
-  animation: scroll 60s linear infinite;
+  width: calc(100% * 6); /* Adjusted for 6 images */
+  animation: scroll 30s linear infinite;
 }
 
 .slide {
   width: 100vw;
-  height: 100%;
-  object-fit: cover;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
 }
 
 /* Endless scroll */
 @keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%); /* Adjusted for 6 images */
+  }
 }
 
 /* Overlay */
@@ -69,111 +94,151 @@ body, html {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 3vw; /* Keep some viewport units for smaller screens */
+  text-align: center;
+}
+
+/* --- Loading Screen --- */
+#loading-screen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #0e0e0e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.spinner {
+  width: 5vw; /* Keep some viewport units for smaller screens */
+  height: 5vw;
+  border: 0.6vw solid #f3f3f3;
+  border-top: 0.6vw solid #6e00ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .content {
-  text-align: center;
   color: white;
+  max-width: 90%;
 }
 
 .content h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 3vh; /* Start with viewport units */
+  margin-bottom: 1.5vh;
 }
 
 .content p {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
+  font-size: 1.8vh; /* Start with viewport units */
+  margin-bottom: 2vh;
   color: #ccc;
+  font-family: 'Athletics', 'sans-serif';
 }
 
 .content button {
-    padding: 15px 40px;
-    font-size: 1.1rem;
-    border: none;
-    background: linear-gradient(135deg, #7b2ff7, #f107a3);
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    box-shadow: 0 4px 15px rgba(123, 47, 247, 0.4);
-  }
-  
-  .content button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(241, 7, 163, 0.5);
-  }
-  .form-popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    padding: 40px;
-    border-radius: 15px;
-    z-index: 5;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-    width: 90%;
-    max-width: 400px;
-  }
-  
-  .form-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-container h2 {
-    color: white;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .form-container input {
-    margin-bottom: 15px;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-  }
-  
-  .submit-btn {
-    background: linear-gradient(135deg, #7b2ff7, #f107a3);
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    transition: 0.3s;
-  }
-  
-  .submit-btn:hover {
-    transform: scale(1.05);
-  }
-  
-  .cancel-btn {
-    background-color: transparent;
-    color: #ffffff;
-    border: 2px solid #ffffff;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .cancel-btn:hover {
-    background-color: rgba(255,255,255,0.2);
-  }
-  /* --- Keyframes --- */
+  padding: 1vh 3vw; /* Start with viewport units */
+  font-size: 1.8vh; /* Start with viewport units */
+  border: none;
+  background: #9F79FF;
+  color: white;
+  border-radius: 0.8vw;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  font-family: 'Kelpo', sans-serif;
+}
+
+.form-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #9F79FF;
+  padding: 4vw; /* Keep some viewport units for smaller screens */
+  border-radius: 2vw;
+  z-index: 5;
+  box-shadow: 0 0 4vw rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 400px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container h2 {
+  color: white;
+  margin-bottom: 2.5vw;
+  text-align: center;
+  font-size: 2.5vh; /* Start with viewport units */
+}
+
+.form-container input {
+  margin-bottom: 2.5vw;
+  padding: 2vw;
+  border: none;
+  border-radius: 1.2vw;
+  font-family: 'Athletics', sans-serif;
+  font-size: 1.3vh; /* Start with viewport units */
+}
+
+.submit-btn {
+  background: rgb(223, 223, 8);
+  color: white;
+  padding: 2vw;
+  border: none;
+  border-radius: 1.2vw;
+  cursor: pointer;
+  margin-bottom: 1.5vw;
+  transition: 1s;
+  font-family: 'Kelpo', sans-serif;
+  font-size: 1.3vh; /* Start with viewport units */
+}
+
+.submit-btn:hover {
+  transform: scale(1.05);
+}
+
+.cancel-btn {
+  background-color: transparent;
+  color: #ffffff;
+  border: 0.3vw solid #ffffff;
+  padding: 2vw;
+  border-radius: 1.2vw;
+  cursor: pointer;
+  transition: 0.3s;
+  font-family: 'Kelpo', sans-serif;
+  font-size: 1.3vh; /* Start with viewport units */
+}
+
+.cancel-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Keyframes --- */
 @keyframes slideDown {
   0% {
-    transform: translateY(-50px);
+    transform: translateY(-4vh);
   }
+
   100% {
     transform: translateY(0);
   }
@@ -181,11 +246,13 @@ body, html {
 
 @keyframes slideUpBounce {
   0% {
-    transform: translateY(50px);
+    transform: translateY(4vh);
   }
+
   60% {
-    transform: translateY(-10px);
+    transform: translateY(-0.8vh);
   }
+
   100% {
     transform: translateY(0);
   }
@@ -195,6 +262,7 @@ body, html {
   0% {
     transform: scale(0.8);
   }
+
   100% {
     transform: scale(1);
   }
@@ -223,6 +291,170 @@ body, html {
   animation-fill-mode: backwards;
 }
 
+/* Responsive Design using Media Queries for larger screens to control scaling */
+@media (min-width: 1200px) {
+  body {
+    font-size: 25px; /* Increase base font size for larger screens */
+  }
+
+  .logo {
+    top: 1.2em;
+    left: 1.5em;
+  }
+
+  .logo img {
+    height: 2.5em;
+    max-width: none; /* Remove vw restriction on larger screens */
+  }
+
+  .content h1 {
+    font-size: 4em; /* Scale with em */
+    margin-bottom: 0.2em;
+  }
+
+  .content p {
+    font-size: 1.2em; /* Scale with em */
+    margin-bottom: 1.5em;
+  }
+
+  .content button {
+    padding: 0.6em 1.5em; /* Scale with em */
+    font-size: 1.2em; /* Scale with em */
+    border-radius: 0.5em;
+  }
+
+  .spinner {
+    width: 3em;
+    height: 3em;
+    border-width: 0.3em;
+    border-top-width: 0.3em;
+  }
+
+  .form-popup {
+    padding: 2em;
+    border-radius: 1em;
+  }
+
+  .form-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 1.5em;
+  }
+
+  .form-container input {
+    padding: 1em;
+    border-radius: 0.8em;
+    font-size: 0.9em;
+    margin-bottom: 1.5em;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    padding: 1em;
+    border-radius: 0.8em;
+    font-size: 0.9em;
+  }
+}
+
+/* Media Queries for smaller screens (adjust as needed) */
+@media (max-width: 900px) {
+  body {
+    font-size: 15px; /* Slightly reduce base font size for tablets */
+  }
+
+  .logo {
+    top: 1em;
+    left: 1.2em;
+  }
+
+  .logo img {
+    height: 2.2em;
+  }
+
+  .content h1 {
+    font-size: 2.2em;
+    margin-bottom: 0.6em;
+  }
+
+  .content p {
+    font-size: 1em;
+    margin-bottom: 1.2em;
+  }
+
+  .content button {
+    padding: 0.5em 1.2em;
+    font-size: 1em;
+    border-radius: 0.4em;
+  }
+
+  .form-container h2 {
+    font-size: 1.3em;
+    margin-bottom: 1.2em;
+  }
+
+  .form-container input {
+    padding: 0.8em;
+    border-radius: 0.6em;
+    font-size: 0.8em;
+    margin-bottom: 1.2em;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    padding: 0.8em;
+    border-radius: 0.6em;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 14px; /* Further reduce base font size for mobile */
+  }
+
+  .logo {
+    top: 0.8em;
+    left: 1em;
+  }
+
+  .logo img {
+    height: 2em;
+  }
+
+  .content h1 {
+    font-size: 1.8em;
+    margin-bottom: 0.5em;
+  }
+
+  .content p {
+    font-size: 0.9em;
+    margin-bottom: 1em;
+  }
+
+  .content button {
+    padding: 0.4em 1em;
+    font-size: 0.9em;
+    border-radius: 0.3em;
+  }
+
+  .form-container h2 {
+    font-size: 1.2em;
+    margin-bottom: 1em;
+  }
+
+  .form-container input {
+    padding: 0.7em;
+    border-radius: 0.5em;
+    font-size: 0.7em;
+    margin-bottom: 1em;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    padding: 0.7em;
+    border-radius: 0.5em;
+    font-size: 0.7em;
+  }
+}
 </style>
 <body>
   <!-- Logo -->
@@ -241,13 +473,15 @@ body, html {
       <img src="Slide 16_9 - 40.png" alt="Screen 3" class="slide">
     </div>
   </div>
-
+<div id="loading-screen">
+  <div class="spinner"></div>
+</div>
   <!-- Dark Overlay -->
   <div class="overlay">
     <div class="content">
       <h1>Join the Waitlist</h1>
       <p>Be the first to get access!</p>
-      <button id="joinButton">Get Notified</button>
+      <button id="joinButton">Get early access</button>
     </div>
   </div>
 
@@ -256,8 +490,8 @@ body, html {
     <form id="waitlistForm" class="form-container">
       <h2>Join the Waitlist</h2>
 
-      <input type="text" id="name" placeholder="Your Name" required>
-      <input type="email" id="email" placeholder="Your Email" required>
+      <input type="text" id="name" placeholder="enter your name...." required>
+      <input type="email" id="email" placeholder="example@gmail.com...." required>
 
       <button type="submit" class="submit-btn">Submit</button>
       <button type="button" class="cancel-btn" onclick="closeForm()">Cancel</button>
@@ -292,7 +526,10 @@ document.getElementById("waitlistForm").addEventListener("submit", function(even
     document.getElementById("waitlistForm").reset();
   }
 });
-
+  window.addEventListener("load", function() {
+    const loadingScreen = document.getElementById("loading-screen");
+    loadingScreen.style.display = "none";
+  });
 
   </script>
 </body>
